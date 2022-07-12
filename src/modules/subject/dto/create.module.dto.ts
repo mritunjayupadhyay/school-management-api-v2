@@ -16,6 +16,8 @@ export class CreateModuleDto {
     })
     readonly description: string;
 
+    @IsNotEmpty()
+    @IsString()
     @ApiProperty({
         type: String,
         default: 'mathematics'

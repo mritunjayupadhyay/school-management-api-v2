@@ -1,6 +1,8 @@
 import { ProgrammeSubjectEntity } from "src/modules/programme/entity/programme_subject.entity";
+import { QuestionMCQEntity } from "src/modules/question/questionMCQ.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { BookEntity } from "./book.entity";
+import { ModuleEntity } from "./module.entity";
 
 @Entity('subject')
 export class SubjectEntity {
@@ -15,6 +17,12 @@ export class SubjectEntity {
 
     @OneToMany(() => BookEntity, book => book.subject)
     books: BookEntity[];
+
+    @OneToMany(() => ModuleEntity, module => module.subject)
+    modules: ModuleEntity[];
+
+    @OneToMany(() => QuestionMCQEntity, mcq_question => mcq_question.subject)
+    mcq_questions: QuestionMCQEntity[];
 
     @ManyToOne(() => ProgrammeSubjectEntity, programme_subject => programme_subject.subject)
     programme_subjects: ProgrammeSubjectEntity[]
