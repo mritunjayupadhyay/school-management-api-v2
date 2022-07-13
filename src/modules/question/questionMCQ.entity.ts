@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from
 import { ModuleEntity } from "../subject/entity/module.entity";
 import { SubjectEntity } from "../subject/entity/subject.entity";
 import { TopicEntity } from "../subject/entity/topic.entity";
+import { UserEntity } from "../user/user.entity";
 
 export enum ViewType {
     TEXT = "text",
@@ -22,6 +23,12 @@ export class QuestionMCQEntity {
         default: ViewType.TEXT
     })
     questionType: ViewType
+
+    @Column({ default: 0 })
+    level: number;
+
+    @Column({ default: true })
+    active: boolean;
 
     @Column()
     optionA: string;
@@ -75,9 +82,6 @@ export class QuestionMCQEntity {
     })
     optionDType: ViewType
 
-    @Column({ default: 0 })
-    level: number;
-
     @ManyToOne(() => SubjectEntity, subject => subject.mcq_questions)
     subject: SubjectEntity;
 
@@ -86,4 +90,7 @@ export class QuestionMCQEntity {
 
     @ManyToOne(() => TopicEntity, topic => topic.mcq_questions)
     topic: TopicEntity;
+
+    @ManyToOne(() => UserEntity, user => user.created_mcq_questions)
+    createdBy: UserEntity;
 }

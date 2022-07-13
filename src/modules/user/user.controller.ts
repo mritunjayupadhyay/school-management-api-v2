@@ -23,7 +23,6 @@ export class UserController {
         description: 'Authentication header',
     })
    @Get('/')
-   @UseGuards(AdminGuard)
    async getUsers() {
        const users = await this.userService.getUsers();
        return {

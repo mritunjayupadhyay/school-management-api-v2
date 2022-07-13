@@ -1,5 +1,8 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, Query } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Query, UseGuards } from "@nestjs/common";
+import { ApiHeader, ApiTags } from "@nestjs/swagger";
+import { CurrentUser } from "src/decorators/current_user.decorator";
+import { AuthGuard } from "src/guards/auth.guard";
+import { QuestionContributorGuard } from "src/guards/questionContributor.guard";
 import { CreateQuestionDto } from "./dto/create.question.dto";
 import { GetQuestionDto } from "./dto/get.question.dto";
 import { QuestionService } from "./question.service";
@@ -22,20 +25,27 @@ export class QuestionController {
         return { error, data };
     }
 
-    // @Post('/')
-    // async createModule(
-    //     @Body() createQuestionDto: CreateQuestionDto
-    // ) {
-    //     const { error, data, message, status} = await this.questionService.createQuestion(createModuleDto);
-    //     if (error === true) {
-    //             throw new HttpException({
-    //                 message
-    //             }, status)
-    //     }
-    //     return { error, data };
-    // }
+    @ApiHeader({
+        name:'token',
+        description: 'Authentication header',
+    })
+    @Post('/')
+    @UseGuards(QuestionContributorGuard)
+    async createModule(
+        @Body() createQuestionDto: CreateQuestionDto,
+        @CurrentUser() currentUser: any
+    ) {
+        const { error, data, message, status} = await this.questionService.createQuestion(createQuestionDto, currentUser);
+        if (error === true) {
+                throw new HttpException({
+                    message
+                }, status)
+        }
+        return { error: false, data };
+    }
 
-    @Get('/get-question')
+
+    @Get('/getQuestion')
     async getSubject(
         @Query() getQuestionDto: GetQuestionDto
     ) {
