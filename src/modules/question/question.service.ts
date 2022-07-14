@@ -45,7 +45,7 @@ export class QuestionService {
         if (Array.isArray(questionData.data) && questionData.data.length) {
             return { 
                 error: true, 
-                message: `${questionText} already in use.`,
+                message: `Already in use.`,
                 status: HttpStatus.BAD_REQUEST
             };
         }
