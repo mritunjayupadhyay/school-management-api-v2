@@ -10,6 +10,7 @@ import { StudentClassModule } from './modules/student_class/student_class.module
 import { AuthModule } from './modules/auth/auth.module';
 import { SubjectModule } from './modules/subject/subject.module';
 import { QuestionModule } from './modules/question/question.module';
+import { RecipeModule } from './modules/recipe/recipe.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,7 +35,8 @@ async function bootstrap() {
       StudentClassModule,
       AuthModule,
       SubjectModule,
-      QuestionModule
+      QuestionModule,
+      RecipeModule
     ]
   }
   const document = SwaggerModule.createDocument(app, config, options);

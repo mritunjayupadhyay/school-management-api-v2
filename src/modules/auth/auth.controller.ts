@@ -41,6 +41,19 @@ export class AuthController {
     return { error, data };
    }
 
+   @Post('login-recipe')
+   async loginRecipe(
+    @Body() loginDto: LoginDto
+   ) {
+    const { error, data, message, status} = await this.authService.signIn(loginDto, true);
+    if (error === true) {
+        throw new HttpException({
+            message
+        }, status)
+    }
+    return { error, data };
+   }
+
    @transformEntity(UserBasicResponseDto)
    @Get('me')
    @ApiHeader({

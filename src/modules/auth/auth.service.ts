@@ -30,7 +30,7 @@ export class AuthService {
         console.log("user and token", token, data);
         return {error: false, data: {user: data, token } };
     }
-    async signIn(loginDto: LoginDto)
+    async signIn(loginDto: LoginDto, isRecipe?: boolean)
     : Promise<{error: boolean, message?: string, status?: number, data?: any}> {
         const { email, password } = loginDto;
         const userData = await this.userService.getUserByEmail(email);
@@ -42,6 +42,17 @@ export class AuthService {
             }
         }
         const user = userData.data;
+        if (isRecipe === true) {
+            const roles = user && user.roles && Array.isArray(user.roles) ? user.roles.map(role => role.name) : [];
+            console.log("this is roles user have", roles);
+            if (!roles.includes('recipeAdmin')) {
+                return {
+                    error: true,
+                    message: 'Wrong Credential',
+                    status: HttpStatus.BAD_REQUEST
+                }
+            }
+        }
         const isPasswordMatch = await this.checkPassword(password, user.password);
         if (!isPasswordMatch) {
             return {
@@ -50,6 +61,7 @@ export class AuthService {
                 status: HttpStatus.BAD_REQUEST
             }
         }
+        
         const token = await this.generateJwtToken(user.id)
         return {error: false, data: token};
     }

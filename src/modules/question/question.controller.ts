@@ -15,7 +15,7 @@ export class QuestionController {
     ) {}
 
     @Get('/')
-    async getModule() {
+    async getQuestions() {
         const { error, data, message, status} = await this.questionService.getQuestions();
         if (error === true) {
                 throw new HttpException({
