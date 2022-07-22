@@ -79,7 +79,7 @@ export class UserService {
     async createMultipleUser(usersDto: CreateUserDto[])
     :Promise<{ savedUser: any, unSavedUser: any}> {
         const savedUser = [];
-        const unSavedUser = []
+        const unSavedUser = [];
         for (const user of usersDto) {
             const userSavingData = await this.createUser(user);
             if (userSavingData.error === true) {

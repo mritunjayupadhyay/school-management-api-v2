@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { QuestionMCQEntity } from "src/modules/question/questionMCQ.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { ModuleEntity } from "./module.entity";
 import { SubjectEntity } from "./subject.entity";
 
@@ -13,9 +14,9 @@ export class TopicEntity {
     @Column()
     desc: string;
 
-    @ManyToOne(() => SubjectEntity, subject => subject.books)
-    subject: SubjectEntity;
-
     @ManyToOne(() => ModuleEntity, module => module.topics)
     module: ModuleEntity;
+
+    @OneToMany(() => QuestionMCQEntity, mcq_question => mcq_question.topic)
+    mcq_questions: QuestionMCQEntity[];
 }

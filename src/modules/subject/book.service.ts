@@ -33,9 +33,6 @@ export class BookService {
             };
         }
 
-        
-        
-
         const book = new BookEntity();
         book.name = bookName;
         book.desc = description;

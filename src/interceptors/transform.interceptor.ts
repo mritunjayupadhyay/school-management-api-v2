@@ -20,7 +20,7 @@ export class TransformInterceptor implements NestInterceptor {
       }
       if (res.error === false && res.data) {
         let serializeData: any;
-        if (Array.isArray(res.data)) {
+        if (Array.isArray(res.data)) { // if return data is in form of list(array)
           serializeData = res.data.map((item) => {
             // return item;
             return plainToInstance(this.dto, item, {

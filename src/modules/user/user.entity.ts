@@ -11,6 +11,7 @@ import { UserProgrammeBookEntity } from "../programme/entity/user_programme_book
 import { UserPrimaryAddressEntity } from "../address/user_primary_address.entity";
 import { StudentClassUserEntity } from "../student_class/student_class_user.entity";
 import { InstitutionUserEntity } from "../institution/institute.user.entity";
+import { QuestionMCQEntity } from "../question/questionMCQ.entity";
 
 export enum Gender {
   MALE = "male",
@@ -90,6 +91,9 @@ export class UserEntity {
 
   @OneToMany(() => UserProgrammeBookEntity, user_programme_book => user_programme_book.user)
   user_programme_books: UserProgrammeBookEntity[]
+
+  @OneToMany(() => QuestionMCQEntity, mcq_question => mcq_question.createdBy)
+  created_mcq_questions: QuestionMCQEntity[]
 
   @ManyToMany(type => ProgrammeEntity, programme => programme.users, {
     eager: true,

@@ -17,10 +17,10 @@ import { UserService } from "./user.service";
     providers: [UserService, UserRoleService],
     exports: [UserService]
 })
-export class UserModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(CurrentUserMiddleware)
-          .forRoutes(UserController);
-      }
+export class UserModule {
+    // configure(consumer: MiddlewareConsumer) {
+    //     consumer
+    //       .apply(CurrentUserMiddleware)
+    //       .forRoutes(UserController);
+    // }
 }

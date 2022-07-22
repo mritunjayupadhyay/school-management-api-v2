@@ -16,12 +16,8 @@ export class CreateTopicDto {
     })
     readonly description: string;
 
-    @ApiProperty({
-        type: String,
-        default: 'mathematics'
-    })
-    subjectName: string;
-
+    @IsNotEmpty()
+    @IsString()
     @ApiProperty({
         type: String,
         default: 'probability'

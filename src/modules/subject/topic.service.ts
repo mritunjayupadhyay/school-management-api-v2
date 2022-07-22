@@ -25,7 +25,7 @@ export class TopicService {
     }
     async createTopic(createTopicDto: CreateTopicDto)
     : Promise<{error: boolean, message?: string, status?: number, data?: TopicEntity}> {
-        const { topicName, moduleName, subjectName, description } = createTopicDto;
+        const { topicName, moduleName, description } = createTopicDto;
 
         // Check if Topic is Already Exist
         const topicData = await this.getTopic(topicName);
@@ -45,22 +45,11 @@ export class TopicService {
                 message: `${moduleName} is not found.`,
                 status: HttpStatus.BAD_REQUEST
             };
-        }
-
-        // Check if subject Exist
-        const subjectData = await this.subjectService.getSubject(subjectName);
-        if (subjectData.error === true) {
-            return { 
-                error: true, 
-                message: `${subjectName} is not found.`,
-                status: HttpStatus.BAD_REQUEST
-            };
-        }        
+        }       
 
         const topic = new TopicEntity();
         topic.name = topicName;
         topic.desc = description;
-        topic.subject = subjectData.data;
         topic.module = moduleData.data;
         const errors = await validate(topic);
         if (errors.length > 0) {

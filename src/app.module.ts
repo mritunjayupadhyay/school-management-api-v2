@@ -9,6 +9,8 @@ import { AddressModule } from './modules/address/address.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { InstitutionModule } from './modules/institution/institution.module';
 import { ProgrammeModule } from './modules/programme/programme.module';
+import { QuestionModule } from './modules/question/question.module';
+import { RecipeModule } from './modules/recipe/recipe.module';
 import { StudentClassModule } from './modules/student_class/student_class.module';
 import { SubjectModule } from './modules/subject/subject.module';
 import { UserModule } from './modules/user/user.module';
@@ -25,7 +27,9 @@ import { UserModule } from './modules/user/user.module';
     InstitutionModule,
     StudentClassModule,
     ProgrammeModule,
-    SubjectModule
+    SubjectModule,
+    QuestionModule,
+    RecipeModule
   ],
   controllers: [AppController],
   providers: [AppService],
