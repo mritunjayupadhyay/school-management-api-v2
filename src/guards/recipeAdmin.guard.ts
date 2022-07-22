@@ -7,6 +7,7 @@ export class RecipeAdminGuard implements CanActivate {
         const user = request.currentUser;
         if (!user) return false;
         const roles = user && user.roles && Array.isArray(user.roles) ? user.roles.map(role => role.name) : [];
+        console.log("roles for recipe is", roles);
         if (roles.includes('recipeAdmin')) return true;
         return false;
     }

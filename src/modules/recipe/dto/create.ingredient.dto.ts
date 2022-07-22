@@ -2,13 +2,13 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, MinLength } from "class-validator";
 
 
-export class GetQuestionDto {
+export class CreateIngredientDto {
     @IsNotEmpty()
     @IsString()
     @MinLength(1)
     @ApiProperty({
         type: String,
-        default: 'Kheer'
+        default: 'milk'
     })
     name: string;
 
@@ -26,13 +26,24 @@ export class GetQuestionDto {
         default: '2 kg milk'
     })
     amount: string;
+}
 
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(2)
+export class UpdateIngredientDto {
     @ApiPropertyOptional({
         type: String,
-        default: 'Kheer'
+        default: 'kheer new name'
     })
-    recipeName: string ;
+    name: string;
+
+    @ApiPropertyOptional({
+        type: String,
+        default: 'image url'
+    })
+    description: string;
+
+    @ApiPropertyOptional({
+        type: String,
+        default: '2 kg milk'
+    })
+    amount: string;
 }

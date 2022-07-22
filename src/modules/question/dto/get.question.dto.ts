@@ -35,5 +35,4 @@ export class GetQuestionDto {
         default: 'mathematics'
     })
     subjectName: string;
-
 }

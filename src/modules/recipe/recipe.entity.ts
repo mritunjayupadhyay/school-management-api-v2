@@ -23,6 +23,9 @@ export class RecipeEntity {
   @Column({ nullable: true })
   recipePic: string;
 
+  @Column({ default: true })
+  active: boolean;
+
   @OneToMany(() => IngredientEntity, ingredient => ingredient.recipe)
   ingredients: IngredientEntity[];
 }

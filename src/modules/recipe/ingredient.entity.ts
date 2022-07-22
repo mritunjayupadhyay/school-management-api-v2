@@ -18,7 +18,7 @@ export class IngredientEntity {
   amount: string;
 
   @ManyToOne(() => RecipeEntity, recipe => recipe.ingredients,
-  { orphanedRowAction: 'delete' }
+  { orphanedRowAction: 'delete', onDelete: 'CASCADE' }
   )
   recipe: RecipeEntity;
 
