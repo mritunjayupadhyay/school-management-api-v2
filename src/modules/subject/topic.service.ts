@@ -33,7 +33,7 @@ export class TopicService {
             return { 
                 error: true, 
                 message: `${topicName} already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
 

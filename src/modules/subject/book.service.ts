@@ -29,7 +29,7 @@ export class BookService {
             return { 
                 error: true, 
                 message: `${bookName} already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
 

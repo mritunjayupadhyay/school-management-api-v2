@@ -35,7 +35,7 @@ export class RecipeService {
             return { 
                 error: true, 
                 message: `${name} already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
         // create new user
@@ -168,7 +168,7 @@ export class RecipeService {
             return {
                 error: true,
                 message: 'Ingredient is already in Recipe',
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
 

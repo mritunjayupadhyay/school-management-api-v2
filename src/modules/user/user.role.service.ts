@@ -79,7 +79,7 @@ export class UserRoleService {
         // Check if role is already added
         const isNewRole = user.roles.findIndex(_role => _role.name === userRole.name) < 0;
         if (!isNewRole) {
-            return { error: true, status: HttpStatus.NOT_ACCEPTABLE, message: 'Role already existed'};
+            return { error: true, status: HttpStatus.CONFLICT, message: 'Role already existed'};
         }
 
         user.roles.push(userRole);

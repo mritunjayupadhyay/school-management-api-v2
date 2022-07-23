@@ -43,7 +43,7 @@ export class InstitutionService {
             return { 
                 error: true, 
                 message: `${name} already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
         // create new institution
@@ -226,7 +226,7 @@ export class InstitutionService {
             return {
                 error: true,
                 message: 'Institute role already exist',
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
         let newInstRole = new InstitutionRoleEntity();

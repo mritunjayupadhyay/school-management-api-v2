@@ -61,6 +61,10 @@ export class RecipeController {
         return { error, data };
     }
 
+    @ApiHeader({
+        name:'token',
+        description: 'Authentication header',
+    })
     @Put('/:recipeName/ingredients/:ingredientName')
     @UseGuards(RecipeAdminGuard)
     @transformEntity(IngredientBasicResponseDto)
@@ -77,6 +81,10 @@ export class RecipeController {
         return { error, data };
     }
 
+    @ApiHeader({
+        name:'token',
+        description: 'Authentication header',
+    })
     @UseGuards(RecipeAdminGuard)
     @Delete('/:recipeName/ingredients/:ingredientName')
     async deleteRecipeIngredient(

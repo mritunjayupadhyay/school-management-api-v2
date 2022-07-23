@@ -46,7 +46,7 @@ export class QuestionService {
             return { 
                 error: true, 
                 message: `Already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
 

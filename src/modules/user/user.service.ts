@@ -41,7 +41,7 @@ export class UserService {
             return { 
                 error: true, 
                 message: `${email} already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
         // create new user

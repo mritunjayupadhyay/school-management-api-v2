@@ -27,7 +27,7 @@ export class SubjectService {
             return { 
                 error: true, 
                 message: `${subjectName} already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
 

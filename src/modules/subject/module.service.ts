@@ -31,7 +31,7 @@ export class ModuleService {
             return { 
                 error: true, 
                 message: `${moduleName} already in use.`,
-                status: HttpStatus.BAD_REQUEST
+                status: HttpStatus.CONFLICT
             };
         }
 

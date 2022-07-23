@@ -63,7 +63,14 @@ export class AuthService {
         }
         
         const token = await this.generateJwtToken(user.id)
-        return {error: false, data: token};
+        return {error: false, data: {
+            token,
+            user: {
+                name: user.firstName + (user.lastName || ''),
+                email: user.email,
+                profilePic: user.profilePic
+            }
+        }};
     }
     async checkPassword(bodyPassword, dbPassword) {
         return bcrypt.compare(bodyPassword, dbPassword);

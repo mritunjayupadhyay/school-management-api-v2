@@ -19,6 +19,13 @@ export class RecipeModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
           .apply(CurrentUserMiddleware)
-          .forRoutes({ path: 'recipe', method: RequestMethod.POST });
+          .forRoutes(
+            { path: 'recipe', method: RequestMethod.POST },
+            { path: 'recipe/:recipeName', method: RequestMethod.PUT },
+            { path: 'recipe/:recipeName', method: RequestMethod.DELETE },
+            { path: 'recipe/:recipeName/ingredients/:ingredientName', method: RequestMethod.PUT },
+            { path: 'recipe/:recipeName/ingredients/:ingredientName', method: RequestMethod.DELETE },
+            { path: 'recipe/:recipeName/ingredients', method: RequestMethod.POST },
+        );
     }
 }
