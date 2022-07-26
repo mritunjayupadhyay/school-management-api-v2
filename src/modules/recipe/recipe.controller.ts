@@ -6,7 +6,7 @@ import { transformEntity } from "src/interceptors/transform.interceptor";
 import { CreateIngredientDto, UpdateIngredientDto } from "./dto/create.ingredient.dto";
 import { CreateRecipeDto, UpdateRecipeDto } from "./dto/create.recipe.dto";
 import { GetIngredientDto, IngredientBasicResponseDto } from "./dto/ingredient.dto";
-import { GetRecipeDto, RecipeBasicResponseDto, RecipeListBasicResponseDto } from "./dto/recipe.dto";
+import { GetRecipeByNameDto, GetRecipeDto, RecipeBasicResponseDto, RecipeListBasicResponseDto } from "./dto/recipe.dto";
 import { RecipeService } from "./recipe.service";
 
 @ApiTags('Recipe')
@@ -47,7 +47,7 @@ export class RecipeController {
         return { error: false, data };
     }
 
-    @Get('/:recipeName/ingredients/:ingredientName')
+    @Get('/:recipeId/ingredients/:ingredientId')
     @transformEntity(IngredientBasicResponseDto)
     async getOneIngredient(
         @Param() getIngredientDto: GetIngredientDto
@@ -61,11 +61,12 @@ export class RecipeController {
         return { error, data };
     }
 
+    // Check me
     @ApiHeader({
         name:'token',
         description: 'Authentication header',
     })
-    @Put('/:recipeName/ingredients/:ingredientName')
+    @Put('/:recipeId/ingredients/:ingredientId')
     @UseGuards(RecipeAdminGuard)
     @transformEntity(IngredientBasicResponseDto)
     async updateRecipeIngredient(
@@ -86,20 +87,20 @@ export class RecipeController {
         description: 'Authentication header',
     })
     @UseGuards(RecipeAdminGuard)
-    @Delete('/:recipeName/ingredients/:ingredientName')
+    @Delete('/:recipeId/ingredients/:ingredientId')
     async deleteRecipeIngredient(
-        @Query() getIngredientDto: GetIngredientDto,
+        @Param() getIngredientDto: GetIngredientDto,
     ) {
         return this.recipeService.deleteRecipeIngredient(getIngredientDto);
     }
 
-    @Get('/:recipeName/ingredients')
+    @Get('/:recipeId/ingredients')
     @transformEntity(IngredientBasicResponseDto)
     async getRecipeIngredients(
         @Param() getRecipeDto: GetRecipeDto
     ) {  // Not so useful as we already get ingredient when we get recipe.
-        const { recipeName } = getRecipeDto;
-        const { error, data, message, status} = await this.recipeService.getRecipeIngredients(recipeName);
+        const { recipeId } = getRecipeDto;
+        const { error, data, message, status} = await this.recipeService.getRecipeIngredients(recipeId);
         if (error === true) {
                 throw new HttpException({
                     message
@@ -114,14 +115,14 @@ export class RecipeController {
     })
     @UseGuards(RecipeAdminGuard)
     @transformEntity(IngredientBasicResponseDto)
-    @Post('/:recipeName/ingredients')
+    @Post('/:recipeId/ingredients')
     // @UseGuards(RecipeAdminGuard)
     async createRecipeIngredient(
         @Param() getRecipeDto: GetRecipeDto,
         @Body() createIngredientDto: CreateIngredientDto
     ) {
-        const { recipeName } = getRecipeDto;
-        const { error, data, message, status} = await this.recipeService.createRecipeIngredient(recipeName, createIngredientDto);
+        const { recipeId } = getRecipeDto;
+        const { error, data, message, status} = await this.recipeService.createRecipeIngredient(recipeId, createIngredientDto);
         if (error === true) {
                 throw new HttpException({
                     message
@@ -129,14 +130,15 @@ export class RecipeController {
         }
         return { error: false, data };
     }
+    
 
-    @Get('/:recipeName')
+    @Get('get-by-name/:recipeName')
     @transformEntity(RecipeBasicResponseDto)
-    async getRecipe(
-        @Param() getRecipeDto: GetRecipeDto
+    async getRecipeByName(
+        @Param() getRecipeDto: GetRecipeByNameDto
     ) {
         const { recipeName } = getRecipeDto;
-        const { error, data, message, status} = await this.recipeService.getRecipe(recipeName);
+        const { error, data, message, status} = await this.recipeService.getRecipeByName(recipeName);
         if (error === true) {
                 throw new HttpException({
                     message
@@ -145,15 +147,34 @@ export class RecipeController {
         return { error, data };
     }
 
-    @Put('/:recipeName')
+    @Get('/:recipeId')
+    @transformEntity(RecipeBasicResponseDto)
+    async getRecipe(
+        @Param() getRecipeDto: GetRecipeDto
+    ) {
+        const { recipeId } = getRecipeDto;
+        const { error, data, message, status} = await this.recipeService.getRecipe(recipeId);
+        if (error === true) {
+                throw new HttpException({
+                    message
+                }, status)
+        }
+        return { error, data };
+    }
+
+    @ApiHeader({
+        name:'token',
+        description: 'Authentication header',
+    })
+    @Put('/:recipeId')
     @UseGuards(RecipeAdminGuard)
     @transformEntity(RecipeBasicResponseDto)
     async updateRecipe(
         @Param() getRecipeDto: GetRecipeDto,
         @Body() updateRecipeDto: UpdateRecipeDto
     ) {
-        const { recipeName } = getRecipeDto;
-        const { error, data, message, status} = await this.recipeService.updateRecipe(recipeName, updateRecipeDto);
+        const { recipeId } = getRecipeDto;
+        const { error, data, message, status} = await this.recipeService.updateRecipe(recipeId, updateRecipeDto);
         if (error === true) {
                 throw new HttpException({
                     message
@@ -162,12 +183,16 @@ export class RecipeController {
         return { error, data };
     }
 
-    @Delete('/:recipeName')
+    @ApiHeader({
+        name:'token',
+        description: 'Authentication header',
+    })
+    @Delete('/:recipeId')
     @UseGuards(RecipeAdminGuard)
     async deleteRecipe(
         @Param() getRecipeDto: GetRecipeDto
     ) {
-        const { recipeName } = getRecipeDto;
-        return this.recipeService.deleteRecipe(recipeName);
+        const { recipeId } = getRecipeDto;
+        return this.recipeService.deleteRecipe(recipeId);
     }
 }

@@ -5,7 +5,7 @@ import { validate } from "class-validator";
 import { Repository } from "typeorm";
 import { CreateIngredientDto, UpdateIngredientDto } from "./dto/create.ingredient.dto";
 import { CreateRecipeDto, UpdateRecipeDto } from "./dto/create.recipe.dto";
-import { GetIngredientDto } from "./dto/ingredient.dto";
+import { GetIngredientByNameDto, GetIngredientDto } from "./dto/ingredient.dto";
 import { IngredientEntity } from "./ingredient.entity";
 import { RecipeEntity } from "./recipe.entity";
 
@@ -30,7 +30,7 @@ export class RecipeService {
         const { name, recipePic, description } = createRecipeDto;
 
         // Check if recipe Exist
-        const recipeData = await this.getRecipe(name);
+        const recipeData = await this.getRecipeByName(name);
         if (recipeData.data) {
             return { 
                 error: true, 
@@ -69,7 +69,19 @@ export class RecipeService {
         }
     }
 
-    async getRecipe(recipeName: string) 
+    async getRecipe(recipeId: string) 
+    : Promise<{error: boolean, message?: string, status?: number, data?: RecipeEntity}> {
+        if (!recipeId) {
+            return { error: true, status: HttpStatus.BAD_REQUEST, message: 'Recipe name is not given'};
+        }
+        const recipe = await this.recipeRepository.findOne({ id: Number(recipeId) }, { relations: ["ingredients"]});
+        if (recipe) {
+            return { error: false, data: recipe };
+        }
+        return { error: true, status: HttpStatus.NOT_FOUND, message: 'Recipe not found'};
+    }
+
+    async getRecipeByName(recipeName: string) 
     : Promise<{error: boolean, message?: string, status?: number, data?: RecipeEntity}> {
         if (!recipeName) {
             return { error: true, status: HttpStatus.BAD_REQUEST, message: 'Recipe name is not given'};
@@ -81,8 +93,8 @@ export class RecipeService {
         return { error: true, status: HttpStatus.NOT_FOUND, message: 'Recipe not found'};
     }
 
-    async updateRecipe(recipeName: string, updateRecipeDto: UpdateRecipeDto) {
-        const recipeData = await this.getRecipe(recipeName);
+    async updateRecipe(recipeId: string, updateRecipeDto: UpdateRecipeDto) {
+        const recipeData = await this.getRecipe(recipeId);
         if (recipeData.error === true) {
             return recipeData;
         }
@@ -99,14 +111,14 @@ export class RecipeService {
         }
     }
 
-    async deleteRecipe(recipeName: string) 
+    async deleteRecipe(recipeId: string) 
     : Promise<{error: boolean, message?: string, status?: number, data?: any}> {
         // Check if recipe Exist
-        const recipeData = await this.getRecipe(recipeName);
+        const recipeData = await this.getRecipe(recipeId);
         if (recipeData.error === true) {
             return recipeData;
         }
-        const deleteRecipe = await this.recipeRepository.delete({ name: recipeName });
+        const deleteRecipe = await this.recipeRepository.delete({ id: Number(recipeId) });
         return { error: false, data: deleteRecipe };
     }
 
@@ -148,10 +160,10 @@ export class RecipeService {
         }
     }
 
-    async createRecipeIngredient(recipeName: string, createIngredientDto: CreateIngredientDto)
+    async createRecipeIngredient(recipeId: string, createIngredientDto: CreateIngredientDto)
     : Promise<{error: boolean, message?: string, status?: number, data?: IngredientEntity}> {
         // Check recipe
-        const recipeData = await this.getRecipe(recipeName);
+        const recipeData = await this.getRecipe(recipeId);
         if (recipeData.error === true) {
             return {
                 error: true,
@@ -163,7 +175,7 @@ export class RecipeService {
 
         // Check ingredient
         const { name } = createIngredientDto;
-        const ingredientData = await this.getOneIngredientOfRecipe(name, recipe);
+        const ingredientData = await this.getOneIngredientByNameOfRecipe(name, recipe);
         if (ingredientData.data) {
             return {
                 error: true,
@@ -183,9 +195,9 @@ export class RecipeService {
 
     async getOneIngredient(getIngredientDto: GetIngredientDto) 
     : Promise<{error: boolean, message?: string, status?: number, data?: IngredientEntity}> {
-        const { recipeName, ingredientName } = getIngredientDto;
+        const { recipeId, ingredientId } = getIngredientDto;
         console.log("query data for ingredient", getIngredientDto);
-        const recipeData = await this.getRecipe(recipeName);
+        const recipeData = await this.getRecipe(recipeId);
         if (recipeData.error === true) {
             return {
                 error: true,
@@ -194,7 +206,7 @@ export class RecipeService {
             };
         } 
         const recipe = recipeData.data;
-        const ingredientData = await this.getOneIngredientOfRecipe(ingredientName, recipe);
+        const ingredientData = await this.getOneIngredientOfRecipe(ingredientId, recipe);
         console.log("ingredient data", ingredientData);
         if (ingredientData.error === false) {
             return { error: false, data: ingredientData.data };
@@ -202,7 +214,37 @@ export class RecipeService {
         return { error: true, status: HttpStatus.NOT_FOUND, message: 'Ingredient not found'};
     }
 
-    async getOneIngredientOfRecipe(ingredientName: string, recipe: RecipeEntity) 
+    async getOneIngredientByName(getIngredientDto: GetIngredientByNameDto) 
+    : Promise<{error: boolean, message?: string, status?: number, data?: IngredientEntity}> {
+        const { recipeId, ingredientName } = getIngredientDto;
+        console.log("query data for ingredient", getIngredientDto);
+        const recipeData = await this.getRecipe(recipeId);
+        if (recipeData.error === true) {
+            return {
+                error: true,
+                message: 'Recipe is not found',
+                status: HttpStatus.BAD_REQUEST
+            };
+        } 
+        const recipe = recipeData.data;
+        const ingredientData = await this.getOneIngredientByNameOfRecipe(ingredientName, recipe);
+        console.log("ingredient data", ingredientData);
+        if (ingredientData.error === false) {
+            return { error: false, data: ingredientData.data };
+        }
+        return { error: true, status: HttpStatus.NOT_FOUND, message: 'Ingredient not found'};
+    }
+
+    async getOneIngredientOfRecipe(ingredientId: string, recipe: RecipeEntity) 
+    : Promise<{error: boolean, message?: string, status?: number, data?: IngredientEntity}> {
+        const ingredient = await this.ingredientRepository.findOne({ id: Number(ingredientId), recipe });
+        if (ingredient) {
+            return { error: false, data: ingredient };
+        }
+        return { error: true, status: HttpStatus.NOT_FOUND, message: 'Ingredient not found'};
+    }
+
+    async getOneIngredientByNameOfRecipe(ingredientName: string, recipe: RecipeEntity) 
     : Promise<{error: boolean, message?: string, status?: number, data?: IngredientEntity}> {
         const ingredient = await this.ingredientRepository.findOne({ name: ingredientName, recipe });
         if (ingredient) {

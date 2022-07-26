@@ -66,7 +66,7 @@ export class AuthService {
         return {error: false, data: {
             token,
             user: {
-                name: user.firstName + (user.lastName || ''),
+                name: user.firstName + ' ' + (user.lastName || ''),
                 email: user.email,
                 profilePic: user.profilePic
             }

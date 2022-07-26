@@ -8,6 +8,16 @@ export class GetIngredientDto extends GetRecipeDto {
     @IsString()
     @ApiProperty({
         type: String,
+        default: 1
+    })
+    readonly ingredientId: string;
+}
+
+export class GetIngredientByNameDto extends GetRecipeDto {
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+        type: String,
         default: 'milk'
     })
     readonly ingredientName: string;

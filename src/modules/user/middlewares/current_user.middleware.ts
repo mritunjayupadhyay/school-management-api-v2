@@ -24,9 +24,17 @@ export class CurrentUserMiddleware implements NestMiddleware {
     if (authHeaders && (authHeaders as string).split(' ')[1]) {
       const token = (authHeaders as string).split(' ')[1];
       console.log("token we got in header", token, this.configService.get("JWTPRIVATEKEY"))
-      const decoded: any = jwt.verify(token, this.configService.get("JWTPRIVATEKEY"));
-      console.log("decoded string", decoded);
-      const user = await this.userService.getUserById(decoded.userId);
+     let decoded:any;
+      try {
+        decoded = jwt.verify(token, this.configService.get("JWTPRIVATEKEY"));
+        console.log("decoded string", decoded);
+        if (!decoded) {
+          throw new HttpException("Token expired", HttpStatus.UNAUTHORIZED);
+        }
+      } catch(e) {
+        throw new HttpException("Token expired", HttpStatus.UNAUTHORIZED);
+      }
+      const user = await this.userService.getUserById(decoded?.userId);
 
       if (!user) {
         throw new HttpException('User not found.', HttpStatus.UNAUTHORIZED);

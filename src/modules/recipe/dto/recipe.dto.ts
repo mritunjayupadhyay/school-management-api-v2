@@ -8,7 +8,18 @@ export class GetRecipeDto {
     @IsString()
     @ApiProperty({
         type: String,
-        default: 'Kheer'
+        default: 2
+    })
+    readonly recipeId: string;
+}
+
+
+export class GetRecipeByNameDto {
+    @IsNotEmpty()
+    @IsString()
+    @ApiProperty({
+        type: String,
+        default: 'kheer'
     })
     readonly recipeName: string;
 }
