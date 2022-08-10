@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { typeOrmConfigAsync } from './config/database.provider';
 import { AddressModule } from './modules/address/address.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ImageUploadModule } from './modules/imageUpload/ImageUpload.module';
 import { InstitutionModule } from './modules/institution/institution.module';
 import { ProgrammeModule } from './modules/programme/programme.module';
 import { QuestionModule } from './modules/question/question.module';
@@ -29,7 +30,8 @@ import { UserModule } from './modules/user/user.module';
     ProgrammeModule,
     SubjectModule,
     QuestionModule,
-    RecipeModule
+    RecipeModule,
+    ImageUploadModule
   ],
   controllers: [AppController],
   providers: [AppService],
