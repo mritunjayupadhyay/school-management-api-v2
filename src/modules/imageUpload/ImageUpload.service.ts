@@ -31,7 +31,7 @@ export class ImageUploadService {
             const signedUrl = await s3Obj.getSignedUrlPromise('putObject', {
                 Bucket: getSignedUrlDto.bucket,
                 Key: key,
-                ContentType: getSignedUrlDto.contentType
+                ContentType: "image/png"
             });
             if (signedUrl) {
                 return {

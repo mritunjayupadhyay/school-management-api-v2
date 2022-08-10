@@ -11,12 +11,6 @@ export class GetSignedUrlDto {
     @IsString()
     @ApiProperty({
         type: String,
-        default: 'png'
-    })
-    readonly contentType: string;
-    @IsString()
-    @ApiProperty({
-        type: String,
         default: 'profile'
     })
     readonly key: string;
