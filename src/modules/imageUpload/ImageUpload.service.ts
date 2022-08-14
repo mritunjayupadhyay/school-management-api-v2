@@ -27,17 +27,18 @@ export class ImageUploadService {
         //     secretAccessKey: this.configService.get("AWS_S3_SECRET_KEY")
         // }
         const uuidKey = uuidv4();
-        const key = `${getSignedUrlDto.key}/${uuidKey}.png`;
+        const key = getSignedUrlDto.fixedPath === 'Y' 
+                        ? `${getSignedUrlDto.key}.png`
+                        : `${getSignedUrlDto.key}/${uuidKey}.png`;
         try {
             const signedUrl = await s3Obj.getSignedUrlPromise('putObject', {
                 Bucket: getSignedUrlDto.bucket,
-                Key: key,
-                ContentType: 'image/jpeg'
+                Key: key
             });
             if (signedUrl) {
                 return {
                     error: false,
-                    data: signedUrl
+                    data: {url: signedUrl, key}
                 }
             }
             return {

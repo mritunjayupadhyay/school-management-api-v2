@@ -76,7 +76,7 @@ export class AuthService {
         return bcrypt.compare(bodyPassword, dbPassword);
     }
     async generateJwtToken(userId: number) {
-        return jwt.sign({ userId }, this.configService.get("JWTPRIVATEKEY"), { expiresIn: '24h'});
+        return jwt.sign({ userId }, this.configService.get("JWTPRIVATEKEY"));
     }
     getValueFromToken(authorization) {
         if (!authorization) return null;
