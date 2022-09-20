@@ -26,6 +26,9 @@ export class RecipeEntity {
   @Column({ default: true })
   active: boolean;
 
+  @Column({ default: false })
+  nonVeg: boolean;
+
   @OneToMany(() => IngredientEntity, ingredient => ingredient.recipe)
   ingredients: IngredientEntity[];
 }

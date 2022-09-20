@@ -25,6 +25,12 @@ export class CreateRecipeDto {
         default: 'image url'
     })
     recipePic: string;
+
+    @ApiPropertyOptional({
+        type: Boolean,
+        default: false
+    })
+    nonVeg: boolean;
 }
 
 export class UpdateRecipeDto {

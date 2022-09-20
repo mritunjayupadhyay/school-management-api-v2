@@ -27,7 +27,7 @@ export class RecipeService {
 
     async validateRecipe(createRecipeDto: CreateRecipeDto)
     : Promise<{error: boolean, message?: string, status?: number, newRecipe?: RecipeEntity}> {
-        const { name, recipePic, description } = createRecipeDto;
+        const { name, recipePic, description, nonVeg } = createRecipeDto;
 
         // Check if recipe Exist
         const recipeData = await this.getRecipeByName(name);
@@ -42,6 +42,7 @@ export class RecipeService {
         let newRecipe = new RecipeEntity();
         newRecipe.name = name;
         newRecipe.description = description;
+        newRecipe.nonVeg = !!nonVeg;
         if (recipePic) {
             newRecipe.recipePic = recipePic;
         }
@@ -118,8 +119,8 @@ export class RecipeService {
         if (recipeData.error === true) {
             return recipeData;
         }
-        const deleteRecipe = await this.recipeRepository.delete({ id: Number(recipeId) });
-        return { error: false, data: deleteRecipe };
+        const deletedRecipe = await this.recipeRepository.delete({ id: Number(recipeId) });
+        return { error: false, data: {recipeId, deletedRecipe} };
     }
 
     // Not so useful as we already get ingredient when we get recipe.
@@ -273,11 +274,12 @@ export class RecipeService {
 
     async deleteRecipeIngredient(getIngredientDto: GetIngredientDto) 
     : Promise<{error: boolean, message?: string, status?: number, data?: any}> {
+        const { recipeId, ingredientId } = getIngredientDto;
         const ingredientData = await this.getOneIngredient(getIngredientDto);
         if (ingredientData.error === true) {
             return ingredientData;
         }
-        const deleteRecipe = await this.ingredientRepository.delete({ id: ingredientData.data.id });
-        return { error: false, data: deleteRecipe };
+        const deletedIngredient = await this.ingredientRepository.delete({ id: ingredientData.data.id });
+        return { error: false, data: {recipeId, ingredientId, deletedIngredient} };
     }
 }

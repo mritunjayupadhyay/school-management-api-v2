@@ -33,6 +33,8 @@ export class RecipeListBasicResponseDto {
     id: number;
     @Expose()
     recipePic: string;
+    @Expose()
+    nonVeg: string;
 }
 
 export class RecipeBasicResponseDto {
@@ -44,6 +46,8 @@ export class RecipeBasicResponseDto {
     id: number;
     @Expose()
     recipePic: string;
+    @Expose()
+    nonVeg: string;
     @Expose()
     @Type(() => IngredientBasicResponseDto)
     ingredients: IngredientBasicResponseDto[];
