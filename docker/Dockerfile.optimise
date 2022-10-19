@@ -1,0 +1,49 @@
+###################
+# BUILD FOR PRODUCTION
+###################
+
+# Base image
+FROM node:18
+
+# Create app directory
+WORKDIR /app
+
+
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# with --chown=node:node we are giving permission to copy
+COPY  package*.json /app/
+
+# Install app dependencies: change npm install to npm ci 
+# when you're doing a clean install of your dependencies
+# --only = production remove dev dependencies
+RUN npm ci && npm cache clean --force
+
+
+# Bundle app source
+# with --chown=node:node we are giving permission to copy
+COPY  . /app 
+
+
+# Creates a "dist" folder with the production build
+RUN npm run build:prod
+
+# rather giving root permissions, use 'node' user given by our image
+USER node
+
+
+
+
+###################
+# PRODUCTION
+###################
+
+
+# Start the server using the production build
+# FROM node:18 As production
+
+# Copy the bundled code from the build stage to the production image
+# COPY --chown=node:node --from=build /app/node_modules ./node_modules
+# COPY --chown=node:node --from=build /app/dist ./dist
+
+# Start the server using the production build
+CMD ["npm", "run", "start:build:prod"]

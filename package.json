@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "build:dev": "export NODE_OPTIONS=--max-old-space-size=8192 && npm run prebuild && npm run copy:dev && nest build",
-    "build:prod": "export NODE_OPTIONS=--max-old-space-size=8192 && npm run prebuild && npm run copy:prod && nest build",
+    "build:prod": "npm run prebuild && npm run copy:prod && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "copy:dev": "cp ./env/dev.env .env",
     "copy:staging": "cp ./env/staging.env .env",
@@ -27,8 +27,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:build.dev": "./scripts/dev/build.sh",
-    "docker:build.prod": "docker build --tag mritunjayupadhyay/school-management-api-prod -f ./docker/Dockerfile.prod . && docker push mritunjayupadhyay/school-management-api-prod"
+    "docker:build.dev": "docker build --tag mritunjayupadhyay/school-management-api-dev -f ./docker/Dockerfile.dev . &&  docker push mritunjayupadhyay/school-management-api-dev",
+    "docker:build.prod:old": "docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --tag mritunjayupadhyay/school-management-api-prod -f ./docker/Dockerfile.prod --push .",
+    "docker:build.prod:optimize": "docker buildx build --platform linux/arm64 --tag mritunjayupadhyay/school-management-api-prod -f ./docker/Dockerfile.optimise --push .",
+    "docker:build.prod": "./scripts/prod/deploy.sh"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
