@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { ProgrammeSubjectEntity } from "../programme/entity/programme_subject.entity";
 import { ModuleEntity } from "../subject/entity/module.entity";
 import { SubjectEntity } from "../subject/entity/subject.entity";
 import { TopicEntity } from "../subject/entity/topic.entity";
@@ -93,4 +94,7 @@ export class QuestionMCQEntity {
 
     @ManyToOne(() => UserEntity, user => user.created_mcq_questions)
     createdBy: UserEntity;
+
+    @ManyToOne(() => ProgrammeSubjectEntity, program_subject => program_subject.related_questions)
+    program_subject: ProgrammeSubjectEntity;
 }

@@ -24,6 +24,6 @@ export class SubjectEntity {
     @OneToMany(() => QuestionMCQEntity, mcq_question => mcq_question.subject)
     mcq_questions: QuestionMCQEntity[];
 
-    @ManyToOne(() => ProgrammeSubjectEntity, programme_subject => programme_subject.subject)
+    @OneToMany(() => ProgrammeSubjectEntity, programme_subject => programme_subject.subject)
     programme_subjects: ProgrammeSubjectEntity[]
 }

@@ -1,3 +1,4 @@
+import { QuestionMCQEntity } from "src/modules/question/questionMCQ.entity";
 import { SubjectEntity } from "src/modules/subject/entity/subject.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { ProgrammeEntity } from "./programme.entity";
@@ -16,4 +17,7 @@ export class ProgrammeSubjectEntity {
 
     @OneToMany(() => ProgrammeRecommendedBookEntity, recommended_book => recommended_book.programme_subject)
     recommended_books: ProgrammeRecommendedBookEntity[];
+
+    @OneToMany(() => QuestionMCQEntity, question_mcq => question_mcq.program_subject)
+    related_questions: QuestionMCQEntity[];
 }
